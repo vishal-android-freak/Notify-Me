@@ -18,28 +18,38 @@ import vishal.vaf.notifyme.R;
 
 public class CustomizationActivity extends AppCompatActivity {
 
+    private SharedPreferences sharedPreferences;
+
     private TextView assistBotText;
     private SharedPreferences.Editor editor;
+
+    private String packageName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customization);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Customize " + getIntent().getStringExtra("package"));
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        packageName = getIntent().getStringExtra("package");
+
+        setTitle("Customize " + packageName);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sharedPreferences.edit();
 
         assistBotText = (TextView) findViewById(R.id.assist_msg);
-        assistBotText.setText(sharedPreferences.getString("assist_wa_msg","Put your message here"));
+        if (packageName.equals("WhatsApp"))
+            assistBotText.setText(sharedPreferences.getString("assist_wa_msg", "Put your message here"));
+        else if (packageName.equals("FBMessenger"))
+            assistBotText.setText(sharedPreferences.getString("assist_fb_msg", "Put your message here"));
 
-        findViewById(R.id.edit_assist_layout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAlertDialog();
-            }
-        });
+            findViewById(R.id.edit_assist_layout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showAlertDialog();
+                }
+            });
 
     }
 
@@ -56,11 +66,19 @@ public class CustomizationActivity extends AppCompatActivity {
         builder.setView(dialogBody);
 
         final EditText assistMsg = (EditText) dialogBody.findViewById(R.id.assist_msg);
+        if (packageName.equals("WhatsApp"))
+            assistMsg.setText(assistBotText.getText().toString());
+        else if (packageName.equals("FBMessenger"))
+            assistMsg.setText(assistBotText.getText().toString());
 
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                editor.putString("assist_wa_msg", assistMsg.getText().toString());
+                if (packageName.equals("WhatsApp"))
+                    editor.putString("assist_wa_msg", assistMsg.getText().toString());
+                else if (packageName.equals("FBMessenger"))
+                    editor.putString("assist_fb_msg", assistMsg.getText().toString());
+
                 editor.apply();
                 assistBotText.setText(assistMsg.getText().toString());
             }
