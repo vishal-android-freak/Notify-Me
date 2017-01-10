@@ -172,26 +172,35 @@ public class NotificationListener extends NotificationListenerService {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ENABLE_ASSIST)) {
                 isAssistEnabled = true;
-                isFbMsgEnabled = true;
-                isWhatsAppEnabled = true;
-                Log.d(TAG, "whatsapp and messenger enabled");
+                if (intent.getBooleanExtra("whatsapp", false)) {
+                    isWhatsAppEnabled = true;
+                } else {
+                    isWhatsAppEnabled = false;
+                    waList.clear();
+                }
+                if (intent.getBooleanExtra("fb_msg", false)) {
+                    isFbMsgEnabled = true;
+                } else {
+                    isFbMsgEnabled = false;
+                    fbMsgList.clear();
+                }
             } else if (intent.getAction().equals(ENABLE_NOTIFY)) {
                 isAssistEnabled = false;
             } else if (intent.getAction().equals(ENABLE_WA)) {
                 if (intent.getBooleanExtra("whatsapp", false)) {
+                    isAssistEnabled = true;
                     isWhatsAppEnabled = true;
-                    Log.d(TAG, "whatsapp enabled");
                 } else {
                     isWhatsAppEnabled = false;
-                    Log.d(TAG, "whatsapp disabled");
+                    waList.clear();
                 }
             } else if (intent.getAction().equals(ENABLE_FB_MSG)) {
                 if (intent.getBooleanExtra("fb_msg", false)) {
+                    isAssistEnabled = true;
                     isFbMsgEnabled = true;
-                    Log.d(TAG, "fbmsg enabled");
                 } else {
                     isFbMsgEnabled = false;
-                    Log.d(TAG, "fbmsg disabled");
+                    fbMsgList.clear();
                 }
             }
         }

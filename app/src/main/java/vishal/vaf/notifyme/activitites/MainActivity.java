@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("is_assist_on", true);
                 editor.apply();
                 Intent intent = new Intent(NotificationListener.ENABLE_ASSIST);
+                intent.putExtra("whatsapp", whatsappSwitch.isChecked());
+                intent.putExtra("fb_msg", fbMessengerSwitch.isChecked());
                 sendBroadcast(intent);
             } else {
                 assistSwitch.setChecked(false);
