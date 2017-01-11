@@ -1,25 +1,25 @@
 /**
- MIT License
-
- Copyright (c) 2017 Vishal Dubey
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
+ * MIT License
+ * <p>
+ * Copyright (c) 2017 Vishal Dubey
+ * <p>
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * <p>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * <p>
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package vishal.vaf.notifyme.services;
@@ -52,8 +52,14 @@ public class NotificationListener extends NotificationListenerService {
     public static final String ENABLE_WA = "enable_wa";
     public static final String ENABLE_FB_MSG = "enable_fb_msg";
 
+    public static final String isWhatsAppOn = "is_wa_on";
+    public static final String isFbMsgOn = "is_fb_msg_on";
+    public static final String isAssistOn = "is_assist_on";
+    public static final String isNotifyOn = "is_notify_on";
+
     private SharedPreferences sharedPreferences;
-    private boolean isWhatsAppEnabled = false, isAssistEnabled = false, isFbMsgEnabled = false;
+    private SharedPreferences.Editor editor;
+    private boolean isWhatsAppEnabled = false, isAssistEnabled = false, isNotifyEnabled = false, isFbMsgEnabled = false;
     private EnableToggleReceiver receiver;
 
     public NotificationListener() {
@@ -76,7 +82,7 @@ public class NotificationListener extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
         if (isAssistEnabled) {
             handleAssistBotNotifications(sbn);
-        } else {
+        } else if (isNotifyEnabled) {
             handleNotifyNotifications(sbn);
         }
     }
@@ -96,6 +102,7 @@ public class NotificationListener extends NotificationListenerService {
     public void onListenerConnected() {
         Log.d(TAG, "connected");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = sharedPreferences.edit();
     }
 
     @Override
@@ -195,38 +202,23 @@ public class NotificationListener extends NotificationListenerService {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ENABLE_ASSIST)) {
-                isAssistEnabled = true;
-                if (intent.getBooleanExtra("whatsapp", false)) {
-                    isWhatsAppEnabled = true;
-                } else {
-                    isWhatsAppEnabled = false;
-                    waList.clear();
-                }
-                if (intent.getBooleanExtra("fb_msg", false)) {
-                    isFbMsgEnabled = true;
-                } else {
-                    isFbMsgEnabled = false;
-                    fbMsgList.clear();
-                }
+                isAssistEnabled = intent.getStringExtra(isAssistOn).equals("1");
+                editor.putBoolean(isAssistOn, isAssistEnabled);
+                Log.d(TAG, "assist " + isAssistEnabled);
             } else if (intent.getAction().equals(ENABLE_NOTIFY)) {
-                isAssistEnabled = false;
+                isNotifyEnabled = intent.getStringExtra(isNotifyOn).equals("1");
+                editor.putBoolean(isNotifyOn, isNotifyEnabled);
+                Log.d(TAG, "notify " + isNotifyEnabled);
             } else if (intent.getAction().equals(ENABLE_WA)) {
-                if (intent.getBooleanExtra("whatsapp", false)) {
-                    isAssistEnabled = true;
-                    isWhatsAppEnabled = true;
-                } else {
-                    isWhatsAppEnabled = false;
-                    waList.clear();
-                }
+                isWhatsAppEnabled = intent.getStringExtra(isWhatsAppOn).equals("1");
+                editor.putBoolean(isWhatsAppOn, isWhatsAppEnabled);
+                Log.d(TAG, "wa " + isWhatsAppEnabled);
             } else if (intent.getAction().equals(ENABLE_FB_MSG)) {
-                if (intent.getBooleanExtra("fb_msg", false)) {
-                    isAssistEnabled = true;
-                    isFbMsgEnabled = true;
-                } else {
-                    isFbMsgEnabled = false;
-                    fbMsgList.clear();
-                }
+                isFbMsgEnabled = intent.getStringExtra(isFbMsgOn).equals("1");
+                editor.putBoolean(isFbMsgOn, isFbMsgEnabled);
+                Log.d(TAG, "fbmsg " + isFbMsgEnabled);
             }
+            editor.apply();
         }
     }
 }

@@ -1,36 +1,37 @@
 /**
- MIT License
-
- Copyright (c) 2017 Vishal Dubey
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
-
+ * MIT License
+ * <p>
+ * Copyright (c) 2017 Vishal Dubey
+ * <p>
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * <p>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * <p>
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  **/
 
 package vishal.vaf.notifyme.activitites;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,6 +39,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -52,95 +54,16 @@ public class MainActivity extends AppCompatActivity {
     private static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
 
     private Switch notifyModeSwitch, assistSwitch, whatsappSwitch, fbMessengerSwitch;
-    private SharedPreferences.Editor editor;
-    private boolean fromSettings = false, fromFbMsg = false, fromWa = false;
+
+    private boolean fromWhatsapp = true, fromFbMsg = true;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        fromSettings = true;
         if (requestCode == 0) {
-            if (isNotificationServiceEnabled()) {
-                assistSwitch.setChecked(true);
-                if (fromWa) {
-                    fbMessengerSwitch.setChecked(fbMessengerSwitch.isChecked());
-                    editor.putBoolean("is_fb_msg_on", fbMessengerSwitch.isChecked());
-                } else {
-                    fbMessengerSwitch.setChecked(true);
-                    editor.putBoolean("is_fb_msg_on", true);
-                }
-                if (fromFbMsg) {
-                    whatsappSwitch.setChecked(whatsappSwitch.isChecked());
-                    editor.putBoolean("is_whatsapp_on", whatsappSwitch.isChecked());
-                } else {
-                    whatsappSwitch.setChecked(true);
-                    editor.putBoolean("is_whatsapp_on", true);
-                }
-                editor.putBoolean("is_assist_on", true);
-                editor.apply();
-                Intent intent = new Intent(NotificationListener.ENABLE_ASSIST);
-                intent.putExtra("whatsapp", whatsappSwitch.isChecked());
-                intent.putExtra("fb_msg", fbMessengerSwitch.isChecked());
-                sendBroadcast(intent);
-            } else {
-                assistSwitch.setChecked(false);
-                if (fromWa) {
-                    fbMessengerSwitch.setChecked(fbMessengerSwitch.isChecked());
-                    editor.putBoolean("is_fb_msg_on", fbMessengerSwitch.isChecked());
-                } else {
-                    fbMessengerSwitch.setChecked(false);
-                    editor.putBoolean("is_fb_msg_on", false);
-                }
-                if (fromFbMsg) {
-                    whatsappSwitch.setChecked(whatsappSwitch.isChecked());
-                    editor.putBoolean("is_whatsapp_on", whatsappSwitch.isChecked());
-                } else {
-                    whatsappSwitch.setChecked(false);
-                    editor.putBoolean("is_whatsapp_on", false);
-                }
-                editor.putBoolean("is_assist_on", false);
-                editor.apply();
-            }
-        } else if (requestCode == 1) {
-            if (isNotificationServiceEnabled()) {
-                whatsappSwitch.setChecked(true);
-                if (!assistSwitch.isChecked()) {
-                    assistSwitch.setChecked(true);
-                }
-                editor.putBoolean("is_assist_on", true);
-                editor.putBoolean("is_whatsapp_on", true);
-                editor.apply();
-                Intent intent = new Intent(NotificationListener.ENABLE_WA);
-                intent.putExtra("whatsapp", true);
-                sendBroadcast(intent);
-            } else {
-                whatsappSwitch.setChecked(false);
-                editor.putBoolean("is_whatsapp_on", false);
-                editor.apply();
-            }
-        } else if (requestCode == 2) {
-            if (isNotificationServiceEnabled()) {
-                fbMessengerSwitch.setChecked(true);
-                if (!assistSwitch.isChecked()) {
-                    assistSwitch.setChecked(true);
-                }
-                editor.putBoolean("is_assist_on", true);
-                editor.putBoolean("is_fb_msg_on", true);
-                editor.apply();
-                Intent intent = new Intent(NotificationListener.ENABLE_FB_MSG);
-                intent.putExtra("fb_msg", true);
-                sendBroadcast(intent);
-            } else {
-                fbMessengerSwitch.setChecked(false);
-                editor.putBoolean("is_fb_msg_on", false);
-                editor.apply();
+            if (!isNotificationServiceEnabled()) {
+                activateNotificationListener();
             }
         }
-
-        if (!whatsappSwitch.isChecked() && !fbMessengerSwitch.isChecked())
-            assistSwitch.setChecked(false);
-        fromSettings = false;
-        fromWa = false;
-        fromFbMsg = false;
     }
 
     @Override
@@ -154,97 +77,100 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = sharedPreferences.edit();
+
+        if (!isNotificationServiceEnabled()) {
+            activateNotificationListener();
+        }
 
         notifyModeSwitch = (Switch) findViewById(R.id.enable_notify_switch);
-        if (sharedPreferences.getBoolean("is_notify_on", false)) {
-            notifyModeSwitch.setChecked(true);
-        } else {
-            notifyModeSwitch.setChecked(false);
-        }
+        notifyModeSwitch.setChecked(sharedPreferences.getBoolean(NotificationListener.isNotifyOn, false));
+        notifyModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    Intent intent = new Intent(NotificationListener.ENABLE_NOTIFY);
+                    intent.putExtra(NotificationListener.isNotifyOn, "1");
+                    sendBroadcast(intent);
+                    assistSwitch.setChecked(false);
+                    whatsappSwitch.setChecked(false);
+                    fbMessengerSwitch.setChecked(false);
+                } else {
+                    Intent intent = new Intent(NotificationListener.ENABLE_NOTIFY);
+                    intent.putExtra(NotificationListener.isNotifyOn, "0");
+                    sendBroadcast(intent);
+                }
+            }
+        });
+
         assistSwitch = (Switch) findViewById(R.id.enable_assist_switch);
-        if (sharedPreferences.getBoolean("is_assist_on", false)) {
-            assistSwitch.setChecked(true);
-        } else {
-            assistSwitch.setChecked(false);
-        }
+        assistSwitch.setChecked(sharedPreferences.getBoolean(NotificationListener.isAssistOn, false));
         assistSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    if (!isNotificationServiceEnabled()) {
-                        startActivityForResult(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS), 0);
-                    }
+                    Intent intent = new Intent(NotificationListener.ENABLE_ASSIST);
+                    intent.putExtra(NotificationListener.isAssistOn, "1");
+                    sendBroadcast(intent);
+                    notifyModeSwitch.setChecked(false);
+                    whatsappSwitch.setChecked(fromFbMsg);
+                    fbMessengerSwitch.setChecked(fromWhatsapp);
+                    fromFbMsg = true;
+                    fromWhatsapp = true;
                 } else {
-                    if (!fromSettings)
-                    startActivityForResult(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS), 0);
+                    Intent intent = new Intent(NotificationListener.ENABLE_ASSIST);
+                    intent.putExtra(NotificationListener.isAssistOn, "0");
+                    sendBroadcast(intent);
+                    whatsappSwitch.setChecked(false);
+                    fbMessengerSwitch.setChecked(false);
                 }
             }
         });
+
         whatsappSwitch = (Switch) findViewById(R.id.whatsapp_switch);
-        if (sharedPreferences.getBoolean("is_whatsapp_on", false)) {
-            whatsappSwitch.setChecked(true);
-        } else {
-            whatsappSwitch.setChecked(false);
-        }
+        whatsappSwitch.setChecked(sharedPreferences.getBoolean(NotificationListener.isWhatsAppOn, false));
         whatsappSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    if (!isNotificationServiceEnabled()) {
-                        startActivityForResult(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS), 1);
-                    } else {
-                        editor.putBoolean("is_whatsapp_on", true);
-                        editor.apply();
-                        Intent intent = new Intent(NotificationListener.ENABLE_WA);
-                        intent.putExtra("whatsapp", true);
-                        sendBroadcast(intent);
+                    Intent intent = new Intent(NotificationListener.ENABLE_WA);
+                    intent.putExtra(NotificationListener.isWhatsAppOn, "1");
+                    sendBroadcast(intent);
+                    if (!assistSwitch.isChecked()) {
+                        fromWhatsapp = false;
+                        assistSwitch.setChecked(true);
                     }
+                    notifyModeSwitch.setChecked(false);
                 } else {
+                    Intent intent = new Intent(NotificationListener.ENABLE_WA);
+                    intent.putExtra(NotificationListener.isWhatsAppOn, "0");
+                    sendBroadcast(intent);
                     if (!fbMessengerSwitch.isChecked()) {
                         assistSwitch.setChecked(false);
-                        fromWa = true;
-                    } else {
-                        editor.putBoolean("is_whatsapp_on", false);
-                        editor.apply();
-                        Intent intent = new Intent(NotificationListener.ENABLE_WA);
-                        intent.putExtra("whatsapp", false);
-                        sendBroadcast(intent);
                     }
                 }
             }
         });
 
         fbMessengerSwitch = (Switch) findViewById(R.id.fb_msg_switch);
-        if (sharedPreferences.getBoolean("is_fb_msg_on", false)) {
-            fbMessengerSwitch.setChecked(true);
-        } else {
-            fbMessengerSwitch.setChecked(false);
-        }
-
+        fbMessengerSwitch.setChecked(sharedPreferences.getBoolean(NotificationListener.isFbMsgOn, false));
         fbMessengerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    if (!isNotificationServiceEnabled()) {
-                        startActivityForResult(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS), 2);
-                    } else {
-                        editor.putBoolean("is_fb_msg_on", true);
-                        editor.apply();
-                        Intent intent = new Intent(NotificationListener.ENABLE_FB_MSG);
-                        intent.putExtra("fb_msg", true);
-                        sendBroadcast(intent);
+                    Intent intent = new Intent(NotificationListener.ENABLE_FB_MSG);
+                    intent.putExtra(NotificationListener.isFbMsgOn, "1");
+                    sendBroadcast(intent);
+                    if (!assistSwitch.isChecked()) {
+                        fromFbMsg = false;
+                        assistSwitch.setChecked(true);
                     }
+                    notifyModeSwitch.setChecked(false);
                 } else {
+                    Intent intent = new Intent(NotificationListener.ENABLE_FB_MSG);
+                    intent.putExtra(NotificationListener.isFbMsgOn, "0");
+                    sendBroadcast(intent);
                     if (!whatsappSwitch.isChecked()) {
                         assistSwitch.setChecked(false);
-                        fromFbMsg = true;
-                    } else {
-                        editor.putBoolean("is_fb_msg_on", false);
-                        editor.apply();
-                        Intent intent = new Intent(NotificationListener.ENABLE_FB_MSG);
-                        intent.putExtra("fb_msg", false);
-                        sendBroadcast(intent);
                     }
                 }
             }
@@ -276,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    private boolean isNotificationServiceEnabled(){
+    private boolean isNotificationServiceEnabled() {
         String pkgName = getPackageName();
         final String flat = Settings.Secure.getString(getContentResolver(),
                 ENABLED_NOTIFICATION_LISTENERS);
@@ -292,5 +218,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private void activateNotificationListener() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setCancelable(false);
+        builder.setMessage("Notification access required for the application to function. Do you want to enable it now?");
+        builder.setPositiveButton("Open settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivityForResult(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS), 0);
+            }
+        });
+
+        builder.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+                Toast.makeText(MainActivity.this, "App cannot function without notification access", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.create();
+        builder.show();
+
     }
 }
