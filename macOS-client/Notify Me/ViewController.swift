@@ -32,7 +32,7 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     }
     
     func setupMqtt() {
-        mqttClient = CocoaMQTT(clientID: "desktop_client", host: "139.59.5.154", port: 1883)
+        mqttClient = CocoaMQTT(clientID: "desktop_client", host: "test.org", port: 1883)
         mqttClient?.username = "vishal"
         mqttClient?.password = "vishal123"
         mqttClient?.keepAlive = 60
