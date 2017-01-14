@@ -82,7 +82,7 @@ public class NotificationListener extends NotificationListenerService {
 
     private MqttAsyncClient client;
 
-    private HashMap<String, NotificationModel> hashMap = new HashMap<>();
+    private HashMap<Integer, NotificationModel> hashMap = new HashMap<>();
 
     public NotificationListener() {
 
@@ -186,12 +186,12 @@ public class NotificationListener extends NotificationListenerService {
         }
         if (isWhatsAppEnabled) {
             if (packageName.equals("com.whatsapp"))
-                reply(remoteInputs, pendingIntent, bundle, senderName, packageName, null, null);
+                reply(remoteInputs, pendingIntent, bundle, senderName, packageName, null, -1);
         }
 
         if (isFbMsgEnabled) {
             if (packageName.equals("com.facebook.orca"))
-                reply(remoteInputs, pendingIntent, bundle, senderName, packageName, null, null);
+                reply(remoteInputs, pendingIntent, bundle, senderName, packageName, null, -1);
         }
 
     }
@@ -214,7 +214,7 @@ public class NotificationListener extends NotificationListenerService {
                 JSONObject object = new JSONObject();
                 object.put("name", bundle.getString(Notification.EXTRA_TITLE));
                 object.put("message", bundle.getString(Notification.EXTRA_TEXT));
-                object.put("id", statusBarNotification.getKey());
+                object.put("id", statusBarNotification.getId());
                 object.put("app_name", statusBarNotification.getPackageName());
 
                 MqttMessage mqttMessage = new MqttMessage(object.toString().getBytes());
@@ -223,13 +223,10 @@ public class NotificationListener extends NotificationListenerService {
 
                 if (client.isConnected()) {
                     client.publish("test", mqttMessage);
-                    hashMap.put(statusBarNotification.getKey(), new NotificationModel(bundle, pendingIntent, remoteInputs));
+                    hashMap.put(statusBarNotification.getId(), new NotificationModel(bundle, pendingIntent, remoteInputs));
                     Log.d(TAG, "pushed");
                 } else {
-                    if (client != null)
-                        client.reconnect();
-                    else
-                        setupMqtt();
+                    setupMqtt();
                 }
 
             } catch (JSONException | MqttException e) {
@@ -239,7 +236,7 @@ public class NotificationListener extends NotificationListenerService {
 
     }
 
-    private void reply(RemoteInput[] remoteInputs, PendingIntent pendingIntent, Bundle bundle, String senderName, String packageName, String message, String notifId) {
+    private void reply(RemoteInput[] remoteInputs, PendingIntent pendingIntent, Bundle bundle, String senderName, String packageName, String message, int notifId) {
 
         if (remoteInputs == null || pendingIntent == null)
             return;
@@ -359,7 +356,7 @@ public class NotificationListener extends NotificationListenerService {
                 String appName = object.optString("app_name");
                 String senderName = object.optString("name");
                 String senderMsg = object.optString("message");
-                String id = object.optString("id");
+                int id = object.optInt("id");
 
                 reply(hashMap.get(id).getRemoteInputs(), hashMap.get(id).getPendingIntent(), hashMap.get(id).getBundle(), senderName, appName, senderMsg, id);
             }
