@@ -8,4 +8,5 @@ target 'Notify Me' do
   # Pods for Notify Me
 pod 'CocoaMQTT'
 pod 'SwiftyJSON'
+pod 'Material', '2.0.0'
 end

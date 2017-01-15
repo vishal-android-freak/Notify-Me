@@ -201,6 +201,8 @@ public class NotificationListener extends NotificationListenerService {
         RemoteInput[] remoteInputs = null;
         PendingIntent pendingIntent = null;
 
+        String packageName = statusBarNotification.getPackageName();
+
         Notification.WearableExtender extender = new Notification.WearableExtender(statusBarNotification.getNotification());
         List<Notification.Action> actions = extender.getActions();
         for (Notification.Action act : actions) {
@@ -209,13 +211,14 @@ public class NotificationListener extends NotificationListenerService {
                 pendingIntent = act.actionIntent;
             }
         }
-        if (actions.size() > 0) {
+        if ((actions.size() > 0) && (packageName.equals("com.whatsapp") | packageName.equals("com.facebook.orca"))) {
             try {
+
                 JSONObject object = new JSONObject();
                 object.put("name", bundle.getString(Notification.EXTRA_TITLE));
                 object.put("message", bundle.getString(Notification.EXTRA_TEXT));
                 object.put("id", bundle.getString(Notification.EXTRA_TITLE));
-                object.put("app_name", statusBarNotification.getPackageName());
+                object.put("app_name", packageName);
 
                 MqttMessage mqttMessage = new MqttMessage(object.toString().getBytes());
                 mqttMessage.setRetained(false);
