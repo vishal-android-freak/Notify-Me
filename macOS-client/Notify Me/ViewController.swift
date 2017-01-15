@@ -15,7 +15,8 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     var mqttClient: CocoaMQTT?
     var center: NSUserNotificationCenter?
     var oldNotifId = ""
-    var oldText = ""
+    var notifText: String?
+    var notifData = [String:NotificationModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +33,7 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     }
     
     func setupMqtt() {
-        mqttClient = CocoaMQTT(clientID: "desktop_client", host: "test.org", port: 1883)
+        mqttClient = CocoaMQTT(clientID: "desktop_client", host: "139.59.5.154", port: 1883)
         mqttClient?.username = "vishal"
         mqttClient?.password = "vishal123"
         mqttClient?.keepAlive = 60
@@ -65,8 +66,9 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
         var senderMessage = json["message"].stringValue
         var id = json["id"].stringValue
         var appName = json["app_name"].stringValue
+        var icon = json["icon"].stringValue
         
-        showNotification(title: "WhatsApp", subTitle: senderName, message: senderMessage, id: id, appName: appName)
+        showNotification(title: "WhatsApp", subTitle: senderName, message: senderMessage, id: id, appName: appName, icon: icon)
         
     }
     
@@ -90,21 +92,29 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
         setupMqtt()
     }
     
-    func showNotification(title: String, subTitle: String, message: String, id: String, appName: String) {
+    func showNotification(title: String, subTitle: String, message: String, id: String, appName: String, icon:String) {
         
         var notification = NSUserNotification()
         
+        notification.title = title
         notification.subtitle = subTitle
         notification.identifier = id
-        notification.informativeText = message
+        
+        if oldNotifId == id {
+            notifText = (notifData[id]?.getInfoText())! + ". " + message
+        } else {
+            notifText = message;
+        }
+        notification.informativeText = notifText
         notification.soundName = NSUserNotificationDefaultSoundName
         notification.userInfo = ["app_name": appName]
         notification.hasReplyButton = true
         notification.otherButtonTitle = "Dismiss"
         
-        center?.deliver(notification)
-        oldText = title
+        notifData[id] = NotificationModel(infoText: notifText!)
         oldNotifId = id
+        
+        center?.deliver(notification)
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
@@ -120,7 +130,7 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
             response["app_name"] = dict?["app_name"]
             response["id"] = notification.identifier
             
-            
+            notifData.removeValue(forKey: notification.identifier!)
             var replyObject = JSON(response)
 
             

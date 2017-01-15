@@ -14,6 +14,7 @@
 		C9477C021E28B22800050780 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9477C001E28B22800050780 /* Main.storyboard */; };
 		C9477C0E1E28B84100050780 /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9477C0D1E28B84100050780 /* CocoaMQTT.framework */; };
 		C94A4D601E2AD21900A98E1F /* Material.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94A4D5F1E2AD21900A98E1F /* Material.framework */; };
+		C9F036301E2BA4500090248B /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F0362F1E2BA4500090248B /* NotificationModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		C9477C0F1E28F02900050780 /* Material.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Material.framework; path = "../../Library/Developer/Xcode/DerivedData/Notify_Me-hfaymoyikhbtvzeyqzgjewlnunsa/Build/Products/Debug/Material/Material.framework"; sourceTree = "<group>"; };
 		C9477C111E2910C600050780 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../Library/Developer/Xcode/DerivedData/Notify_Me-hfaymoyikhbtvzeyqzgjewlnunsa/Build/Products/Debug/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		C94A4D5F1E2AD21900A98E1F /* Material.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Material.framework; path = "../../../Library/Developer/Xcode/DerivedData/Notify_Me-gswovrndxapmcpcprxqymhxgmssg/Build/Products/Debug/Material/Material.framework"; sourceTree = "<group>"; };
+		C9F0362F1E2BA4500090248B /* NotificationModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				C9477BFE1E28B22800050780 /* Assets.xcassets */,
 				C9477C001E28B22800050780 /* Main.storyboard */,
 				C9477C031E28B22800050780 /* Info.plist */,
+				C9F0362F1E2BA4500090248B /* NotificationModel.swift */,
 			);
 			path = "Notify Me";
 			sourceTree = "<group>";
@@ -219,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9F036301E2BA4500090248B /* NotificationModel.swift in Sources */,
 				C9477BFD1E28B22800050780 /* ViewController.swift in Sources */,
 				C9477BFB1E28B22800050780 /* AppDelegate.swift in Sources */,
 			);
