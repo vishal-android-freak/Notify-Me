@@ -14,9 +14,8 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     
     var mqttClient: CocoaMQTT?
     var center: NSUserNotificationCenter?
-    var oldNotifId = ""
     var notifText: String?
-    var notifData = [String:NotificationModel]()
+    var notifData = [String:NSUserNotification]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,19 +99,27 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
         notification.subtitle = subTitle
         notification.identifier = id
         
-        if oldNotifId == id {
-            notifText = (notifData[id]?.getInfoText())! + ". " + message
+        if (notifData.count != 0) {
+        for (key, _) in notifData {
+            if key == id {
+                notifText = (notifData[key]?.informativeText)! + ". " + message
+            } else {
+                notifText = message;
+            }        }
         } else {
             notifText = message;
         }
+        
+
         notification.informativeText = notifText
         notification.soundName = NSUserNotificationDefaultSoundName
         notification.userInfo = ["app_name": appName]
         notification.hasReplyButton = true
         notification.otherButtonTitle = "Dismiss"
+        notification.setValue(NSImage(named: "WhatsApp"), forKey: "_identityImage")
         
-        notifData[id] = NotificationModel(infoText: notifText!)
-        oldNotifId = id
+        notifData[id] = notification
+        notifText = ""
         
         center?.deliver(notification)
     }
@@ -132,7 +139,8 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
             
             notifData.removeValue(forKey: notification.identifier!)
             var replyObject = JSON(response)
-
+            
+            
             
             mqttClient?.publish("test1", withString: replyObject.rawString()!, qos: CocoaMQTTQOS.qos1, retained: false, dup: false)
         }
