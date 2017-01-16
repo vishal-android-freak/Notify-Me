@@ -114,7 +114,19 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-
+        if (isNotifyEnabled) {
+            if (sbn.getPackageName().equals("com.whatsapp")) {
+                String id = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE);
+                MqttMessage mqttMessage = new MqttMessage(id.getBytes());
+                mqttMessage.setRetained(false);
+                mqttMessage.setQos(1);
+                try {
+                    client.publish("notification", mqttMessage);
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
@@ -349,7 +361,7 @@ public class NotificationListener extends NotificationListenerService {
             public void connectionLost(Throwable cause) {
                 cause.printStackTrace();
                 try {
-                    client.reconnect();
+                    setupMqtt();
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }

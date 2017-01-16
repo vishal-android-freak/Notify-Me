@@ -32,7 +32,7 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     }
     
     func setupMqtt() {
-        mqttClient = CocoaMQTT(clientID: "desktop_client", host: "139.59.5.154", port: 1883)
+        mqttClient = CocoaMQTT(clientID: "desktop_client", host: "test.org", port: 1883)
         mqttClient?.username = "vishal"
         mqttClient?.password = "vishal123"
         mqttClient?.keepAlive = 60
@@ -48,6 +48,7 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
         if ack == .accept {
             print("mqtt connected")
             mqttClient?.subscribe("hihi", qos: CocoaMQTTQOS.qos1)
+            mqttClient?.subscribe("notification", qos:CocoaMQTTQOS.qos1)
         }
     }
     
@@ -60,6 +61,19 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
+        
+        if (message.topic == "notification") {
+            do {
+                for (key, _) in notifData {
+                    if key == message.string! {
+                        self.center?.removeDeliveredNotification(notifData[key]!)
+                    }
+                }
+            } catch {
+                print(error)
+            }
+            notifData.removeValue(forKey: message.string!)
+        } else {
         var json = JSON.parse(message.string!)
         var senderName = json["name"].stringValue
         var senderMessage = json["message"].stringValue
@@ -68,6 +82,8 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
         var icon = json["icon"].stringValue
         
         showNotification(title: "WhatsApp", subTitle: senderName, message: senderMessage, id: id, appName: appName, icon: icon)
+            
+        }
         
     }
     
@@ -137,10 +153,7 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
             response["app_name"] = dict?["app_name"]
             response["id"] = notification.identifier
             
-            notifData.removeValue(forKey: notification.identifier!)
             var replyObject = JSON(response)
-            
-            
             
             mqttClient?.publish("test1", withString: replyObject.rawString()!, qos: CocoaMQTTQOS.qos1, retained: false, dup: false)
         }
