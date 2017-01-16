@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af4ac244-9073-4937-b067-31c959182440" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../macOS-client/Notify Me/Assets.xcassets/Messenger.imageset/Icon-App-76x76@1x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../macOS-client/Notify Me/Assets.xcassets/Messenger.imageset/Icon-App-76x76@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../macOS-client/Notify Me/Assets.xcassets/Messenger.imageset/Icon-App-76x76@3x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../macOS-client/Notify Me/Assets.xcassets/Messenger.imageset/Contents.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../macOS-client/Notify Me.xcworkspace/xcuserdata/vishal.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../macOS-client/Notify Me.xcworkspace/xcuserdata/vishal.xcuserdatad/UserInterfaceState.xcuserstate" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/vishal/vaf/notifyme/services/NotificationListener.java" afterPath="$PROJECT_DIR$/app/src/main/java/vishal/vaf/notifyme/services/NotificationListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../macOS-client/Notify Me/ViewController.swift" afterPath="$PROJECT_DIR$/../macOS-client/Notify Me/ViewController.swift" />
@@ -45,8 +48,8 @@
       <file leaf-file-name="NotificationListener.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/vishal/vaf/notifyme/services/NotificationListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="330" column="52" selection-start-line="330" selection-start-column="52" selection-end-line="330" selection-end-column="52" />
+            <state relative-caret-position="-544">
+              <caret line="331" column="52" selection-start-line="331" selection-start-column="52" selection-end-line="331" selection-end-column="52" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1808,10 +1811,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="ProjectPane" />
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1886,6 +1885,10 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2307,6 +2310,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/vishal/vaf/notifyme/services/NotificationListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-25/android/app/Notification.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="148">
@@ -2317,8 +2330,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/vishal/vaf/notifyme/services/NotificationListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="330" column="52" selection-start-line="330" selection-start-column="52" selection-end-line="330" selection-end-column="52" />
+        <state relative-caret-position="-544">
+          <caret line="331" column="52" selection-start-line="331" selection-start-column="52" selection-end-line="331" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

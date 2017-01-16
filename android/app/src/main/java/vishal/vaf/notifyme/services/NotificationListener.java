@@ -115,7 +115,7 @@ public class NotificationListener extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         if (isNotifyEnabled) {
-            if (sbn.getPackageName().equals("com.whatsapp")) {
+            if (sbn.getPackageName().equals("com.whatsapp") | sbn.getPackageName().equals("com.facebook.orca")) {
                 String id = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE);
                 MqttMessage mqttMessage = new MqttMessage(id.getBytes());
                 mqttMessage.setRetained(false);
@@ -243,6 +243,7 @@ public class NotificationListener extends NotificationListenerService {
                     client.publish("hihi", mqttMessage);
                     hashMap.put(bundle.getString(Notification.EXTRA_TITLE), new NotificationModel(bundle, pendingIntent, remoteInputs));
                     Log.d(TAG, "pushed");
+                    Log.d(TAG, object.toString());
                 } else {
                     setupMqtt();
                 }
@@ -369,6 +370,8 @@ public class NotificationListener extends NotificationListenerService {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
+
+                Log.d(TAG, message.toString());
 
                 JSONObject object = new JSONObject(message.toString());
                 String appName = object.optString("app_name");

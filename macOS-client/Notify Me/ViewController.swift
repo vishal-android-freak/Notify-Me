@@ -63,16 +63,12 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
         
         if (message.topic == "notification") {
-            do {
                 for (key, _) in notifData {
                     if key == message.string! {
                         self.center?.removeDeliveredNotification(notifData[key]!)
                     }
-                }
-            } catch {
-                print(error)
+                notifData.removeValue(forKey: message.string!)
             }
-            notifData.removeValue(forKey: message.string!)
         } else {
         var json = JSON.parse(message.string!)
         var senderName = json["name"].stringValue
@@ -81,7 +77,7 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
         var appName = json["app_name"].stringValue
         var icon = json["icon"].stringValue
         
-        showNotification(title: "WhatsApp", subTitle: senderName, message: senderMessage, id: id, appName: appName, icon: icon)
+        showNotification(title: appName == "com.whatsapp" ? "WhatsApp":"Messenger", subTitle: senderName, message: senderMessage, id: id, appName: appName, icon: icon)
             
         }
         
@@ -114,29 +110,13 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
         notification.title = title
         notification.subtitle = subTitle
         notification.identifier = id
-        
-        if (notifData.count != 0) {
-        for (key, _) in notifData {
-            if key == id {
-                notifText = (notifData[key]?.informativeText)! + ". " + message
-            } else {
-                notifText = message;
-            }        }
-        } else {
-            notifText = message;
-        }
-        
-
-        notification.informativeText = notifText
+        notification.informativeText = message
         notification.soundName = NSUserNotificationDefaultSoundName
         notification.userInfo = ["app_name": appName]
         notification.hasReplyButton = true
         notification.otherButtonTitle = "Dismiss"
-        notification.setValue(NSImage(named: "WhatsApp"), forKey: "_identityImage")
-        
+        notification.setValue(NSImage(named: appName == "com.whatsapp" ? "WhatsApp":"Messenger"), forKey: "_identityImage")
         notifData[id] = notification
-        notifText = ""
-        
         center?.deliver(notification)
     }
     
@@ -146,6 +126,7 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
         if notification.activationType == NSUserNotification.ActivationType.replied {
+            print("replied")
             var dict = notification.userInfo as? [String:String]
             var response = [String:String]()
             response["name"] = notification.subtitle
