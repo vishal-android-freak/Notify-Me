@@ -3,6 +3,42 @@
 
     <item
         is-multidex="false"
+        jar="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/exploded-aar/ai.api/sdk/2.0.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="ef86662de841c33484dad7b8d5967ae9b309378e">
+        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/ai.api-sdk-2.0.1_ae0d3fd638ca7f10597514e43ef5366a5879a831.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vishal/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.1.0/support-annotations-25.1.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="64cb6b229a8bdfd907bc8dd46839a0053e4c018d">
+        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/support-annotations-25.1.0_1083f1393000e870929ff68700f7e0fb0bf40e31.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="2a53c4f3518116b8c6aee0e477233f0f7da8616f">
+        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.1.0_ab26e93383c68d6c1e120b9e7eadea1f94c0ba8a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/25.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="7f2420506110902f033406b25697cf97ee8c38b2">
+        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/com.android.support-cardview-v7-25.1.0_0e5233e89bd77b214f31f511cb7ed2d1b4564bf4.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/exploded-aar/uk.co.chrisjenx/calligraphy/2.2.0/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -36,6 +72,15 @@
         revision="25.0.0"
         sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
         <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.1.0_aafb692fb496ce01a4717b5c61d658b355819082.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vishal/.gradle/caches/modules-2/files-2.1/ai.api/libai/1.2.2/a80239122fa643aa6a8ee52e1784f0576de0e03/libai-1.2.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="0a80239122fa643aa6a8ee52e1784f0576de0e03">
+        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/libai-1.2.2_98a2a5eb9ea4002f300cf4a3f115c985ceb6a84f.jar" />
     </item>
     <item
         is-multidex="false"
@@ -75,51 +120,6 @@
     </item>
     <item
         is-multidex="false"
-        jar="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-25.1.0_7751776ec25f33a7950cf77ee0675364772929f4.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
-        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-25.1.0_23561cb32fbdfe6dba0113f649077ec1c0482bd2.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/vishal/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.1.0/support-annotations-25.1.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="64cb6b229a8bdfd907bc8dd46839a0053e4c018d">
-        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/support-annotations-25.1.0_1083f1393000e870929ff68700f7e0fb0bf40e31.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="2a53c4f3518116b8c6aee0e477233f0f7da8616f">
-        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.1.0_ab26e93383c68d6c1e120b9e7eadea1f94c0ba8a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/25.1.0/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="7f2420506110902f033406b25697cf97ee8c38b2">
-        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/com.android.support-cardview-v7-25.1.0_0e5233e89bd77b214f31f511cb7ed2d1b4564bf4.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="/Users/vishal/.gradle/caches/modules-2/files-2.1/org.eclipse.paho/org.eclipse.paho.client.mqttv3/1.1.0/89d827ffa47c241f2627421ef1d6c7a8c207a341/org.eclipse.paho.client.mqttv3-1.1.0.jar"
         jumboMode="false"
         optimize="true"
@@ -144,6 +144,51 @@
         revision="25.0.0"
         sha1="b266c8faa5af72e579b9da36ef35053ffed6ac64">
         <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-25.1.0_aab861895712ca74325c7132e6db19ffbe1bc8d2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Applications/Android Studio.app/Contents/gradle/m2repository/commons-io/commons-io/2.4/commons-io-2.4.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="b1b6ea3b7e4aa4f492509a4952029cd8e48019ad">
+        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/commons-io-2.4_db9d9c7f5dc9abc44c05f9a56b43532b2a4af315.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vishal/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.4/695b63d702f505b9b916e02272e3b6381bade7f/gson-2.4.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="0695b63d702f505b9b916e02272e3b6381bade7f">
+        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/gson-2.4_5ede814aa22c41b701bd998a2764d9f818893dd7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vishal/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.2/d7ef6ad7ff0711dd12fe409d62d72d6ed14516e0/log4j-api-2.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d7ef6ad7ff0711dd12fe409d62d72d6ed14516e0">
+        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/log4j-api-2.2_f9f2d14a86ecd1f7307dba48aaa0af7c725e0d0e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-25.1.0_7751776ec25f33a7950cf77ee0675364772929f4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
+        <dex dex="/Users/vishal/Android/NotifyMe/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-25.1.0_23561cb32fbdfe6dba0113f649077ec1c0482bd2.jar" />
     </item>
 
 </items>

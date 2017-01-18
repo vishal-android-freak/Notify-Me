@@ -15,7 +15,6 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     var mqttClient: CocoaMQTT?
     var center: NSUserNotificationCenter?
     var notifText: String?
-    var notifData = [String:NSUserNotification]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,16 +60,15 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
-        
         if (message.topic == "notification") {
-                for (key, _) in notifData {
-                    if key == message.string! {
-                        self.center?.removeDeliveredNotification(notifData[key]!)
-                    }
-                notifData.removeValue(forKey: message.string!)
+            for noti in (center?.deliveredNotifications)! {
+                if noti.identifier == message.string! {
+                    center?.removeDeliveredNotification(noti)
+                    break
+                }
             }
         } else {
-        var json = JSON.parse(message.string!)
+        var json = JSON.init(parseJSON: message.string!)
         var senderName = json["name"].stringValue
         var senderMessage = json["message"].stringValue
         var id = json["id"].stringValue
@@ -116,7 +114,6 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
         notification.hasReplyButton = true
         notification.otherButtonTitle = "Dismiss"
         notification.setValue(NSImage(named: appName == "com.whatsapp" ? "WhatsApp":"Messenger"), forKey: "_identityImage")
-        notifData[id] = notification
         center?.deliver(notification)
     }
     
@@ -125,8 +122,10 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
+        print(notification.subtitle)
+        print(notification.response)
+        print(notification.identifier)
         if notification.activationType == NSUserNotification.ActivationType.replied {
-            print("replied")
             var dict = notification.userInfo as? [String:String]
             var response = [String:String]()
             response["name"] = notification.subtitle
@@ -138,6 +137,10 @@ class ViewController: NSViewController, CocoaMQTTDelegate, NSUserNotificationCen
             
             mqttClient?.publish("test1", withString: replyObject.rawString()!, qos: CocoaMQTTQOS.qos1, retained: false, dup: false)
         }
+    }
+    
+    func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
+        print("delivered")
     }
 
 }

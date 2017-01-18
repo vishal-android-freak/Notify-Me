@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2017 Vishal Dubey
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,7 +32,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.service.notification.NotificationListenerService;
@@ -47,17 +47,21 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import android.util.Base64;
+
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ai.api.AIServiceException;
+import ai.api.android.AIConfiguration;
+import ai.api.android.AIDataService;
+import ai.api.model.AIRequest;
+import ai.api.model.AIResponse;
+import vishal.vaf.notifyme.R;
 import vishal.vaf.notifyme.model.NotificationModel;
 
 public class NotificationListener extends NotificationListenerService {
@@ -86,6 +90,12 @@ public class NotificationListener extends NotificationListenerService {
     private MqttAsyncClient client;
 
     private HashMap<String, NotificationModel> hashMap = new HashMap<>();
+
+    private AIConfiguration configuration;
+    AIDataService aiDataService;
+
+    private RemoteInput[] remoteInputs;
+    private PendingIntent pendingIntent;
 
     public NotificationListener() {
 
@@ -151,6 +161,9 @@ public class NotificationListener extends NotificationListenerService {
         } catch (MqttException e) {
             e.printStackTrace();
         }
+
+        configuration = new AIConfiguration(getString(R.string.client_access_token), AIConfiguration.SupportedLanguages.English, AIConfiguration.RecognitionEngine.System);
+        aiDataService = new AIDataService(this, configuration);
     }
 
     @Override
@@ -186,6 +199,8 @@ public class NotificationListener extends NotificationListenerService {
                         pendingIntent = act.actionIntent;
                     }
                 }
+            } else {
+                handleConversationalBot(statusBarNotification);
             }
         } else if (packageName.equals("com.facebook.orca")) {
             if (!fbMsgList.contains(bundle.getString(Notification.EXTRA_TITLE))) {
@@ -197,6 +212,8 @@ public class NotificationListener extends NotificationListenerService {
                         pendingIntent = act.actionIntent;
                     }
                 }
+            } else {
+                handleConversationalBot(statusBarNotification);
             }
         }
         if (isWhatsAppEnabled) {
@@ -243,7 +260,6 @@ public class NotificationListener extends NotificationListenerService {
                     client.publish("hihi", mqttMessage);
                     hashMap.put(bundle.getString(Notification.EXTRA_TITLE), new NotificationModel(bundle, pendingIntent, remoteInputs));
                     Log.d(TAG, "pushed");
-                    Log.d(TAG, object.toString());
                 } else {
                     setupMqtt();
                 }
@@ -265,11 +281,11 @@ public class NotificationListener extends NotificationListenerService {
 
         if (packageName.equals("com.whatsapp")) {
             for (RemoteInput remoteInput : remoteInputs) {
-                bundle.putCharSequence(remoteInput.getResultKey(), message == null ? sharedPreferences.getString("assist_wa_msg", "") : message);
+                bundle.putCharSequence(remoteInput.getResultKey(), message == null ? ("Hey " + senderName.split(" ")[0] + ", " + sharedPreferences.getString("assist_wa_msg", "")) : message);
             }
         } else if (packageName.equals("com.facebook.orca")) {
             for (RemoteInput remoteInput : remoteInputs) {
-                bundle.putCharSequence(remoteInput.getResultKey(), sharedPreferences.getString("assist_fb_msg", ""));
+                bundle.putCharSequence(remoteInput.getResultKey(), message == null ? ("Hey " + senderName.split(" ")[0] + ", " + sharedPreferences.getString("assist_fb_msg", "")) : message);
             }
         }
 
@@ -387,5 +403,46 @@ public class NotificationListener extends NotificationListenerService {
 
             }
         });
+    }
+
+    private void handleConversationalBot(StatusBarNotification statusBarNotification) {
+        final Bundle bundle = statusBarNotification.getNotification().extras;
+
+        final String packageName = statusBarNotification.getPackageName();
+
+        Notification.WearableExtender extender = new Notification.WearableExtender(statusBarNotification.getNotification());
+        List<Notification.Action> actions = extender.getActions();
+        for (Notification.Action act : actions) {
+            if (act != null && act.getRemoteInputs() != null) {
+                remoteInputs = act.getRemoteInputs();
+                pendingIntent = act.actionIntent;
+            }
+        }
+
+        String queryText = bundle.getString(Notification.EXTRA_TEXT);
+        final String senderName = bundle.getString(Notification.EXTRA_TITLE);
+
+        if (!queryText.contains("new messages") | !queryText.contains("new message")) {
+            new AsyncTask<AIRequest, Void, AIResponse>() {
+
+                protected AIResponse doInBackground(AIRequest... requests) {
+                    final AIRequest request = requests[0];
+                    try {
+                        return aiDataService.request(request);
+                    } catch (AIServiceException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(AIResponse aiResponse) {
+                    if (aiResponse != null) {
+                        reply(remoteInputs, pendingIntent, bundle, senderName, packageName, aiResponse.getResult().getFulfillment().getSpeech(), senderName);
+                    }
+                }
+
+            }.execute(new AIRequest(queryText));
+        }
     }
 }
