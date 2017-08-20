@@ -3,4 +3,6 @@
     <string name="title_activity_cutomize">Customize</string>
 
     <string name="client_access_token">a44917f90262429d8bda2b8456f57336</string>
+    <string name="FACEBOOK_APP_ID">160595291160389</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">3fec9746f5ed8707d687e549b86e9b23</string>
 </resources>

@@ -25,6 +25,7 @@
 package vishal.vaf.notifyme.services;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.RemoteInput;
 import android.content.BroadcastReceiver;
@@ -32,6 +33,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -80,6 +82,8 @@ public class NotificationListener extends NotificationListenerService {
     public static final String isAssistOn = "is_assist_on";
     public static final String isNotifyOn = "is_notify_on";
 
+    private String phoneNumber = "";
+
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
@@ -126,7 +130,7 @@ public class NotificationListener extends NotificationListenerService {
     public void onNotificationRemoved(StatusBarNotification sbn) {
         if (isNotifyEnabled) {
             if (sbn.getPackageName().equals("com.whatsapp") | sbn.getPackageName().equals("com.facebook.orca")) {
-                String id = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE);
+                String id = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE).toLowerCase();
                 MqttMessage mqttMessage = new MqttMessage(id.getBytes());
                 mqttMessage.setRetained(false);
                 mqttMessage.setQos(1);
@@ -150,6 +154,8 @@ public class NotificationListener extends NotificationListenerService {
         Log.d(TAG, "connected");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sharedPreferences.edit();
+        phoneNumber = sharedPreferences.getString("phone","").replace("+","");
+        Log.d("number", phoneNumber);
         isAssistEnabled = sharedPreferences.getBoolean(isAssistOn, false);
         isNotifyEnabled = sharedPreferences.getBoolean(isNotifyOn, false);
         isWhatsAppEnabled = sharedPreferences.getBoolean(isWhatsAppOn, false);
@@ -243,13 +249,13 @@ public class NotificationListener extends NotificationListenerService {
                 pendingIntent = act.actionIntent;
             }
         }
-        if ((actions.size() > 0) && (packageName.equals("com.whatsapp") | packageName.equals("com.facebook.orca"))) {
+        if ((actions.size() > 0) && (packageName.equals("com.whatsapp") || packageName.equals("com.facebook.orca"))) {
             try {
 
                 JSONObject object = new JSONObject();
                 object.put("name", bundle.getString(Notification.EXTRA_TITLE));
                 object.put("message", bundle.getString(Notification.EXTRA_TEXT));
-                object.put("id", bundle.getString(Notification.EXTRA_TITLE));
+                object.put("id", bundle.getString(Notification.EXTRA_TITLE).toLowerCase());
                 object.put("app_name", packageName);
 
                 MqttMessage mqttMessage = new MqttMessage(object.toString().getBytes());
@@ -257,8 +263,8 @@ public class NotificationListener extends NotificationListenerService {
                 mqttMessage.setQos(1);
 
                 if (client.isConnected()) {
-                    client.publish("hihi", mqttMessage);
-                    hashMap.put(bundle.getString(Notification.EXTRA_TITLE), new NotificationModel(bundle, pendingIntent, remoteInputs));
+                    client.publish(phoneNumber + "_send", mqttMessage);
+                    hashMap.put(bundle.getString(Notification.EXTRA_TITLE).toLowerCase(), new NotificationModel(bundle, pendingIntent, remoteInputs));
                     Log.d(TAG, "pushed");
                 } else {
                     setupMqtt();
@@ -345,19 +351,17 @@ public class NotificationListener extends NotificationListenerService {
 
     private void setupMqtt() throws MqttException {
         MemoryPersistence persistence = new MemoryPersistence();
-        client = new MqttAsyncClient("tcp://test.org", "android_phone", persistence);
+        client = new MqttAsyncClient("tcp://autonxt.in:1883", "android_phone", persistence);
         MqttConnectOptions options = new MqttConnectOptions();
         options.setCleanSession(false);
         options.setAutomaticReconnect(true);
-        options.setUserName("vishal");
-        options.setPassword("vishal123".toCharArray());
         options.setConnectionTimeout(0);
         client.connect(options, new IMqttActionListener() {
             @Override
             public void onSuccess(IMqttToken asyncActionToken) {
                 Log.d(TAG, "mqtt connected");
                 try {
-                    client.subscribe("test1", 1);
+                    client.subscribe(phoneNumber + "_receive", 1);
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
@@ -422,7 +426,7 @@ public class NotificationListener extends NotificationListenerService {
         String queryText = bundle.getString(Notification.EXTRA_TEXT);
         final String senderName = bundle.getString(Notification.EXTRA_TITLE);
 
-        if (!queryText.contains("new messages") | !queryText.contains("new message")) {
+        if (!queryText.contains("new messages") || !queryText.contains("new message")) {
             new AsyncTask<AIRequest, Void, AIResponse>() {
 
                 protected AIResponse doInBackground(AIRequest... requests) {
