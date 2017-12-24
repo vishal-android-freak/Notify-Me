@@ -25,7 +25,6 @@
 package vishal.vaf.notifyme.services;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.RemoteInput;
 import android.content.BroadcastReceiver;
@@ -232,7 +231,7 @@ public class NotificationListener extends NotificationListenerService {
         if ((actions.size() > 0) && (packageName.equals("com.whatsapp") || packageName.equals("com.facebook.orca"))) {
             try {
 
-                JSONObject object = new JSONObject();
+                HashMap<String, String> object = new HashMap<>();
                 object.put("name", bundle.getString(Notification.EXTRA_TITLE));
                 object.put("message", bundle.getString(Notification.EXTRA_TEXT));
                 object.put("id", bundle.getString(Notification.EXTRA_TITLE).toLowerCase());
@@ -241,7 +240,7 @@ public class NotificationListener extends NotificationListenerService {
                 reference.child("app").setValue(object);
                 hashMap.put(bundle.getString(Notification.EXTRA_TITLE).toLowerCase(), new NotificationModel(bundle, pendingIntent, remoteInputs));
 
-            } catch (JSONException | NullPointerException e) {
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
@@ -324,14 +323,15 @@ public class NotificationListener extends NotificationListenerService {
     private ValueEventListener messagesListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            JSONObject object = dataSnapshot.getValue(JSONObject.class);
-            String appName = object.optString("app_name");
-            String senderName = object.optString("name");
-            String senderMsg = object.optString("message");
-            String id = object.optString("id");
+            HashMap<String, String> object = (HashMap<String, String>) dataSnapshot.getValue();
+            if (object != null) {
+                String appName = object.get("app_name");
+                String senderName = object.get("name");
+                String senderMsg = object.get("message");
+                String id = object.get("id");
 
-            reply(hashMap.get(id).getRemoteInputs(), hashMap.get(id).getPendingIntent(), hashMap.get(id).getBundle(), senderName, appName, senderMsg, id);
-
+                reply(hashMap.get(id).getRemoteInputs(), hashMap.get(id).getPendingIntent(), hashMap.get(id).getBundle(), senderName, appName, senderMsg, id);
+            }
         }
 
         @Override
