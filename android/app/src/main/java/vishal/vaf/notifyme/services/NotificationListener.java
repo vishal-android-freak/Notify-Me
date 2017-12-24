@@ -41,16 +41,12 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
-import org.eclipse.paho.client.mqttv3.IMqttActionListener;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.IMqttToken;
-import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -91,7 +87,7 @@ public class NotificationListener extends NotificationListenerService {
 
     private EnableToggleReceiver receiver;
 
-    private MqttAsyncClient client;
+    private DatabaseReference reference;
 
     private HashMap<String, NotificationModel> hashMap = new HashMap<>();
 
@@ -131,14 +127,7 @@ public class NotificationListener extends NotificationListenerService {
         if (isNotifyEnabled) {
             if (sbn.getPackageName().equals("com.whatsapp") | sbn.getPackageName().equals("com.facebook.orca")) {
                 String id = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE).toLowerCase();
-                MqttMessage mqttMessage = new MqttMessage(id.getBytes());
-                mqttMessage.setRetained(false);
-                mqttMessage.setQos(1);
-                try {
-                    client.publish("notification", mqttMessage);
-                } catch (MqttException e) {
-                    e.printStackTrace();
-                }
+                reference.child("remove" + "/id").setValue(id);
             }
         }
     }
@@ -154,18 +143,13 @@ public class NotificationListener extends NotificationListenerService {
         Log.d(TAG, "connected");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sharedPreferences.edit();
-        phoneNumber = sharedPreferences.getString("phone","").replace("+","");
-        Log.d("number", phoneNumber);
+        phoneNumber = sharedPreferences.getString("phone", "").replace("+", "");
         isAssistEnabled = sharedPreferences.getBoolean(isAssistOn, false);
         isNotifyEnabled = sharedPreferences.getBoolean(isNotifyOn, false);
         isWhatsAppEnabled = sharedPreferences.getBoolean(isWhatsAppOn, false);
         isFbMsgEnabled = sharedPreferences.getBoolean(isFbMsgOn, false);
-        try {
-            if (isNotifyEnabled) {
-                setupMqtt();
-            }
-        } catch (MqttException e) {
-            e.printStackTrace();
+        if (isNotifyEnabled) {
+            connectToFirebase();
         }
 
         configuration = new AIConfiguration(getString(R.string.client_access_token), AIConfiguration.SupportedLanguages.English, AIConfiguration.RecognitionEngine.System);
@@ -177,11 +161,7 @@ public class NotificationListener extends NotificationListenerService {
         Log.d(TAG, "disconnected");
         fbMsgList.clear();
         waList.clear();
-        try {
-            client.disconnect();
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
+        reference.removeEventListener(messagesListener);
     }
 
     private void handleAssistBotNotifications(StatusBarNotification statusBarNotification) {
@@ -258,19 +238,10 @@ public class NotificationListener extends NotificationListenerService {
                 object.put("id", bundle.getString(Notification.EXTRA_TITLE).toLowerCase());
                 object.put("app_name", packageName);
 
-                MqttMessage mqttMessage = new MqttMessage(object.toString().getBytes());
-                mqttMessage.setRetained(false);
-                mqttMessage.setQos(1);
+                reference.child("app").setValue(object);
+                hashMap.put(bundle.getString(Notification.EXTRA_TITLE).toLowerCase(), new NotificationModel(bundle, pendingIntent, remoteInputs));
 
-                if (client.isConnected()) {
-                    client.publish(phoneNumber + "_send", mqttMessage);
-                    hashMap.put(bundle.getString(Notification.EXTRA_TITLE).toLowerCase(), new NotificationModel(bundle, pendingIntent, remoteInputs));
-                    Log.d(TAG, "pushed");
-                } else {
-                    setupMqtt();
-                }
-
-            } catch (JSONException | MqttException | NullPointerException e) {
+            } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
             }
         }
@@ -323,14 +294,10 @@ public class NotificationListener extends NotificationListenerService {
                 isNotifyEnabled = intent.getStringExtra(isNotifyOn).equals("1");
                 editor.putBoolean(isNotifyOn, isNotifyEnabled);
                 Log.d(TAG, "notify " + isNotifyEnabled);
-                try {
-                    if (isNotifyEnabled) {
-                        setupMqtt();
-                    } else {
-                        client.disconnect();
-                    }
-                } catch (MqttException e) {
-                    e.printStackTrace();
+                if (isNotifyEnabled) {
+                    connectToFirebase();
+                } else {
+                    reference.removeEventListener(messagesListener);
                 }
             } else if (intent.getAction().equals(ENABLE_WA)) {
                 isWhatsAppEnabled = intent.getStringExtra(isWhatsAppOn).equals("1");
@@ -349,65 +316,29 @@ public class NotificationListener extends NotificationListenerService {
         }
     }
 
-    private void setupMqtt() throws MqttException {
-        MemoryPersistence persistence = new MemoryPersistence();
-        client = new MqttAsyncClient("tcp://autonxt.in:1883", "android_phone", persistence);
-        MqttConnectOptions options = new MqttConnectOptions();
-        options.setCleanSession(false);
-        options.setAutomaticReconnect(true);
-        options.setConnectionTimeout(0);
-        client.connect(options, new IMqttActionListener() {
-            @Override
-            public void onSuccess(IMqttToken asyncActionToken) {
-                Log.d(TAG, "mqtt connected");
-                try {
-                    client.subscribe(phoneNumber + "_receive", 1);
-                } catch (MqttException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                exception.printStackTrace();
-                try {
-                    client.reconnect();
-                } catch (MqttException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        client.setCallback(new MqttCallback() {
-            @Override
-            public void connectionLost(Throwable cause) {
-                cause.printStackTrace();
-                try {
-                    setupMqtt();
-                } catch (MqttException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-
-                Log.d(TAG, message.toString());
-
-                JSONObject object = new JSONObject(message.toString());
-                String appName = object.optString("app_name");
-                String senderName = object.optString("name");
-                String senderMsg = object.optString("message");
-                String id = object.optString("id");
-
-                reply(hashMap.get(id).getRemoteInputs(), hashMap.get(id).getPendingIntent(), hashMap.get(id).getBundle(), senderName, appName, senderMsg, id);
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken token) {
-
-            }
-        });
+    private void connectToFirebase() {
+        reference = FirebaseDatabase.getInstance().getReference("notifyme/" + phoneNumber);
+        reference.child("desktop").addValueEventListener(messagesListener);
     }
+
+    private ValueEventListener messagesListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            JSONObject object = dataSnapshot.getValue(JSONObject.class);
+            String appName = object.optString("app_name");
+            String senderName = object.optString("name");
+            String senderMsg = object.optString("message");
+            String id = object.optString("id");
+
+            reply(hashMap.get(id).getRemoteInputs(), hashMap.get(id).getPendingIntent(), hashMap.get(id).getBundle(), senderName, appName, senderMsg, id);
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
     private void handleConversationalBot(StatusBarNotification statusBarNotification) {
         final Bundle bundle = statusBarNotification.getNotification().extras;
