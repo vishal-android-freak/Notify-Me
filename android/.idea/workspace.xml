@@ -43,8 +43,8 @@
       <file leaf-file-name="NotificationListener.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/vishal/vaf/notifyme/services/NotificationListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3044">
-              <caret line="333" column="13" lean-forward="false" selection-start-line="333" selection-start-column="13" selection-end-line="333" selection-end-column="13" />
+            <state relative-caret-position="315">
+              <caret line="330" column="39" lean-forward="false" selection-start-line="330" selection-start-column="39" selection-end-line="330" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#5673#5712#0" expanded="true" />
@@ -1974,7 +1974,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514135213297" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514135530903" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2022,7 +2022,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514135213297" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514135530903" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2205,7 +2205,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514135213298" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514135530904" />
       </method>
     </configuration>
     <list size="1">
@@ -2422,14 +2422,14 @@
         <state relative-caret-position="578">
           <caret line="58" column="0" lean-forward="true" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
           <folding>
-            <element signature="e#1968#2116#0" expanded="true" />
-            <element signature="e#2115#2116#0" expanded="true" />
-            <element signature="e#3969#3970#0" expanded="true" />
-            <element signature="e#4048#4049#0" expanded="true" />
-            <element signature="e#4605#5293#0" expanded="true" />
-            <element signature="e#5292#5293#0" expanded="true" />
-            <element signature="e#5316#5651#0" expanded="true" />
-            <element signature="e#5650#5651#0" expanded="true" />
+            <element signature="e#1968#2116#0" expanded="false" />
+            <element signature="e#2115#2116#0" expanded="false" />
+            <element signature="e#3969#3970#0" expanded="false" />
+            <element signature="e#4048#4049#0" expanded="false" />
+            <element signature="e#4605#5293#0" expanded="false" />
+            <element signature="e#5292#5293#0" expanded="false" />
+            <element signature="e#5316#5651#0" expanded="false" />
+            <element signature="e#5650#5651#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2613,14 +2613,14 @@
         <state relative-caret-position="163">
           <caret line="95" column="47" lean-forward="false" selection-start-line="95" selection-start-column="47" selection-end-line="95" selection-end-column="47" />
           <folding>
-            <element signature="e#1968#2116#0" expanded="true" />
-            <element signature="e#2115#2116#0" expanded="true" />
-            <element signature="e#3969#3970#0" expanded="true" />
-            <element signature="e#4048#4049#0" expanded="true" />
-            <element signature="e#4605#5293#0" expanded="true" />
-            <element signature="e#5292#5293#0" expanded="true" />
-            <element signature="e#5316#5651#0" expanded="true" />
-            <element signature="e#5650#5651#0" expanded="true" />
+            <element signature="e#1968#2116#0" expanded="false" />
+            <element signature="e#2115#2116#0" expanded="false" />
+            <element signature="e#3969#3970#0" expanded="false" />
+            <element signature="e#4048#4049#0" expanded="false" />
+            <element signature="e#4605#5293#0" expanded="false" />
+            <element signature="e#5292#5293#0" expanded="false" />
+            <element signature="e#5316#5651#0" expanded="false" />
+            <element signature="e#5650#5651#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2651,8 +2651,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/vishal/vaf/notifyme/services/NotificationListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3044">
-          <caret line="333" column="13" lean-forward="false" selection-start-line="333" selection-start-column="13" selection-end-line="333" selection-end-column="13" />
+        <state relative-caret-position="315">
+          <caret line="330" column="39" lean-forward="false" selection-start-line="330" selection-start-column="39" selection-end-line="330" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#5673#5712#0" expanded="true" />

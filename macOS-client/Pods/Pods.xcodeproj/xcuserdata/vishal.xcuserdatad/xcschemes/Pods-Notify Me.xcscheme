@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "59009542B6CD85E1CE5AE166117C2AE6"
+               BlueprintIdentifier = "9AD4D96FE45EAFC68DE0FC5598C23638"
                BuildableName = "Pods_Notify_Me.framework"
                BlueprintName = "Pods-Notify Me"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -26,6 +26,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
@@ -36,6 +37,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -45,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "59009542B6CD85E1CE5AE166117C2AE6"
+            BlueprintIdentifier = "9AD4D96FE45EAFC68DE0FC5598C23638"
             BuildableName = "Pods_Notify_Me.framework"
             BlueprintName = "Pods-Notify Me"
             ReferencedContainer = "container:Pods.xcodeproj">

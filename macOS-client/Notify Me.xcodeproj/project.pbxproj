@@ -12,8 +12,8 @@
 		C9477BFD1E28B22800050780 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9477BFC1E28B22800050780 /* ViewController.swift */; };
 		C9477BFF1E28B22800050780 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9477BFE1E28B22800050780 /* Assets.xcassets */; };
 		C9477C021E28B22800050780 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9477C001E28B22800050780 /* Main.storyboard */; };
-		C9477C0E1E28B84100050780 /* CocoaMQTT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9477C0D1E28B84100050780 /* CocoaMQTT.framework */; };
 		C94A4D601E2AD21900A98E1F /* Material.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94A4D5F1E2AD21900A98E1F /* Material.framework */; };
+		C98661281FF0450B001BBDB4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C98661271FF0450A001BBDB4 /* GoogleService-Info.plist */; };
 		C9F036301E2BA4500090248B /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F0362F1E2BA4500090248B /* NotificationModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +31,19 @@
 		C9477C0F1E28F02900050780 /* Material.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Material.framework; path = "../../Library/Developer/Xcode/DerivedData/Notify_Me-hfaymoyikhbtvzeyqzgjewlnunsa/Build/Products/Debug/Material/Material.framework"; sourceTree = "<group>"; };
 		C9477C111E2910C600050780 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../Library/Developer/Xcode/DerivedData/Notify_Me-hfaymoyikhbtvzeyqzgjewlnunsa/Build/Products/Debug/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		C94A4D5F1E2AD21900A98E1F /* Material.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Material.framework; path = "../../../Library/Developer/Xcode/DerivedData/Notify_Me-gswovrndxapmcpcprxqymhxgmssg/Build/Products/Debug/Material/Material.framework"; sourceTree = "<group>"; };
+		C986610F1FF03788001BBDB4 /* libFirebaseCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C98661101FF03788001BBDB4 /* libFirebaseDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseDatabase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C98661121FF037A4001BBDB4 /* libFirebaseCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C98661151FF037AF001BBDB4 /* libFirebaseCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C98661161FF037AF001BBDB4 /* libFirebaseDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseDatabase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C98661181FF037C2001BBDB4 /* libFirebaseCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C986611A1FF037DB001BBDB4 /* libFirebaseDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseDatabase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C986611C1FF037E1001BBDB4 /* libFirebaseCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C986611E1FF03AD8001BBDB4 /* libFirebaseCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C98661201FF03ADD001BBDB4 /* libFirebaseDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseDatabase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C98661221FF03AE2001BBDB4 /* leveldb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = leveldb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C98661241FF03AE8001BBDB4 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GoogleToolboxForMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C98661271FF0450A001BBDB4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C9F0362F1E2BA4500090248B /* NotificationModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -40,7 +53,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C94A4D601E2AD21900A98E1F /* Material.framework in Frameworks */,
-				C9477C0E1E28B84100050780 /* CocoaMQTT.framework in Frameworks */,
 				71407EBB63BEBFF2F357108D /* Pods_Notify_Me.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -51,6 +63,18 @@
 		9A56846D40677F365DA4B02E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C98661241FF03AE8001BBDB4 /* GoogleToolboxForMac.framework */,
+				C98661221FF03AE2001BBDB4 /* leveldb.framework */,
+				C98661201FF03ADD001BBDB4 /* libFirebaseDatabase.a */,
+				C986611E1FF03AD8001BBDB4 /* libFirebaseCore.a */,
+				C986611C1FF037E1001BBDB4 /* libFirebaseCore.a */,
+				C986611A1FF037DB001BBDB4 /* libFirebaseDatabase.a */,
+				C98661181FF037C2001BBDB4 /* libFirebaseCore.a */,
+				C98661151FF037AF001BBDB4 /* libFirebaseCore.a */,
+				C98661161FF037AF001BBDB4 /* libFirebaseDatabase.a */,
+				C98661121FF037A4001BBDB4 /* libFirebaseCore.a */,
+				C986610F1FF03788001BBDB4 /* libFirebaseCore.a */,
+				C98661101FF03788001BBDB4 /* libFirebaseDatabase.a */,
 				C94A4D5F1E2AD21900A98E1F /* Material.framework */,
 				C9477C111E2910C600050780 /* SwiftyJSON.framework */,
 				C9477C0F1E28F02900050780 /* Material.framework */,
@@ -90,6 +114,7 @@
 		C9477BF91E28B22800050780 /* Notify Me */ = {
 			isa = PBXGroup;
 			children = (
+				C98661271FF0450A001BBDB4 /* GoogleService-Info.plist */,
 				C9477BFA1E28B22800050780 /* AppDelegate.swift */,
 				C9477BFC1E28B22800050780 /* ViewController.swift */,
 				C9477BFE1E28B22800050780 /* Assets.xcassets */,
@@ -135,6 +160,7 @@
 				TargetAttributes = {
 					C9477BF61E28B22800050780 = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -164,6 +190,7 @@
 			files = (
 				C9477BFF1E28B22800050780 /* Assets.xcassets in Resources */,
 				C9477C021E28B22800050780 /* Main.storyboard in Resources */,
+				C98661281FF0450B001BBDB4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,13 +203,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Notify Me-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9E6AE55EB65C7B8EA18B3600 /* [CP] Copy Pods Resources */ = {
@@ -206,9 +236,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Notify Me/Pods-Notify Me-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Material/Material.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Material.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -338,11 +375,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseDatabase\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleToolboxForMac\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Material\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/leveldb-library\"",
+				);
 				INFOPLIST_FILE = "Notify Me/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "vaf.vishal.Notify-Me";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -352,11 +398,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseDatabase\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleToolboxForMac\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Material\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/leveldb-library\"",
+				);
 				INFOPLIST_FILE = "Notify Me/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "vaf.vishal.Notify-Me";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
