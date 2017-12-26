@@ -40,7 +40,6 @@ dependencies {
     compile 'com.android.support:design:27.0.2'
     compile 'com.android.support:cardview-v7:27.0.2'
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
-    compile 'com.facebook.android:account-kit-sdk:4.+'
     compile 'ai.api:libai:1.2.2'
     compile 'gun0912.ted:tedpermission:1.0.3'
     compile 'ai.api:sdk:2.0.1@aar'

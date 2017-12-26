@@ -142,7 +142,7 @@ public class NotificationListener extends NotificationListenerService {
         Log.d(TAG, "connected");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sharedPreferences.edit();
-        phoneNumber = sharedPreferences.getString("phone", "").replace("+", "");
+        phoneNumber = sharedPreferences.getString("phone", "");
         isAssistEnabled = sharedPreferences.getBoolean(isAssistOn, false);
         isNotifyEnabled = sharedPreferences.getBoolean(isNotifyOn, false);
         isWhatsAppEnabled = sharedPreferences.getBoolean(isWhatsAppOn, false);

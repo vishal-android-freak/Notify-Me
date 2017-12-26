@@ -7,11 +7,20 @@
     android:padding="16dp"
     tools:context="vishal.vaf.notifyme.activitites.LoginActivity">
 
+    <EditText
+        android:id="@+id/phone"
+        android:hint="Enter your phone number"
+        android:inputType="phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ProgressBar
         android:visibility="gone"
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/phone"
+        android:layout_margin="16dp"
         android:layout_centerInParent="true"/>
 
     <Button
@@ -21,7 +30,9 @@
         android:background="@drawable/accent_bg"
         android:text="LOG IN"
         android:layout_margin="16dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/phone"
         android:textColor="@android:color/white"
-        android:layout_gravity="center_horizontal|center_vertical" />
+         />
 
 </RelativeLayout>
