@@ -1,18 +1,18 @@
 /**
  * MIT License
- * <p>
+ *
  * Copyright (c) 2017 Vishal Dubey
- * <p>
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p>
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * <p>
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,9 +32,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
@@ -45,9 +45,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,6 +93,8 @@ public class NotificationListener extends NotificationListenerService {
     private RemoteInput[] remoteInputs;
     private PendingIntent pendingIntent;
 
+    private Handler handler;
+
     public NotificationListener() {
 
     }
@@ -140,6 +139,7 @@ public class NotificationListener extends NotificationListenerService {
     @Override
     public void onListenerConnected() {
         Log.d(TAG, "connected");
+        handler = new Handler();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sharedPreferences.edit();
         phoneNumber = sharedPreferences.getString("phone", "");
@@ -231,14 +231,16 @@ public class NotificationListener extends NotificationListenerService {
         if ((actions.size() > 0) && (packageName.equals("com.whatsapp") || packageName.equals("com.facebook.orca"))) {
             try {
 
+                String id = bundle.getString(Notification.EXTRA_TITLE).replaceAll("\\(.*?\\)", "").replace(" ", "").replace(":","");
+
                 HashMap<String, String> object = new HashMap<>();
                 object.put("name", bundle.getString(Notification.EXTRA_TITLE));
                 object.put("message", bundle.getString(Notification.EXTRA_TEXT));
-                object.put("id", bundle.getString(Notification.EXTRA_TITLE).toLowerCase());
+                object.put("id", id);
                 object.put("app_name", packageName);
 
                 reference.child("app").setValue(object);
-                hashMap.put(bundle.getString(Notification.EXTRA_TITLE).toLowerCase(), new NotificationModel(bundle, pendingIntent, remoteInputs));
+                hashMap.put(id, new NotificationModel(bundle, pendingIntent, remoteInputs));
 
             } catch (NullPointerException e) {
                 e.printStackTrace();
@@ -325,10 +327,18 @@ public class NotificationListener extends NotificationListenerService {
         public void onDataChange(DataSnapshot dataSnapshot) {
             HashMap<String, String> object = (HashMap<String, String>) dataSnapshot.getValue();
             if (object != null) {
+                Log.d("data", object.toString());
                 String appName = object.get("app_name");
                 String senderName = object.get("name");
                 String senderMsg = object.get("message");
                 String id = object.get("id");
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        reference.child("desktop").setValue(null);
+                    }
+                }, 1000);
 
                 reply(hashMap.get(id).getRemoteInputs(), hashMap.get(id).getPendingIntent(), hashMap.get(id).getBundle(), senderName, appName, senderMsg, id);
             }

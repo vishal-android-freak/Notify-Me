@@ -16,12 +16,14 @@ class ViewController: NSViewController, NSUserNotificationCenterDelegate {
     var ref: DatabaseReference!
     var msgListener: DatabaseHandle!
     var notificationRemoveListener: DatabaseHandle!
+    var notifData = [String: NSUserNotification]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         center = NSUserNotificationCenter.default
         center.delegate = self
         ref = Database.database().reference()
+        
         msgListener = ref.child("notifyme/123456789/app").observe(DataEventType.value, with: {
             snapshot in
             let data = snapshot.value as? [String: String]
@@ -29,7 +31,7 @@ class ViewController: NSViewController, NSUserNotificationCenterDelegate {
                 let appName = data!["app_name"]
                 self.showNotification(title:  appName == "com.whatsapp" ? "WhatsApp":"Messenger", subTitle: data!["name"]!, message: data!["message"]!, id: data!["id"]!, appName: appName!)
             }
-            //TODO: remove this once received from realtime db
+            self.ref.child("notifyme/123456789/app").setValue(nil)
         })
         notificationRemoveListener = ref.child("notifyme/123456789/remove").observe(DataEventType.value, with: {
             snapshot in
@@ -46,19 +48,31 @@ class ViewController: NSViewController, NSUserNotificationCenterDelegate {
     }
     
     func showNotification(title: String, subTitle: String, message: String, id: String, appName: String) {
-        
-        let notification = NSUserNotification()
-        
-        notification.title = title
-        notification.subtitle = subTitle
-        notification.identifier = id
-        notification.informativeText = message
-        notification.soundName = NSUserNotificationDefaultSoundName
-        notification.userInfo = ["app_name": appName]
-        notification.hasReplyButton = true
-        notification.otherButtonTitle = "Dismiss"
-        notification.setValue(NSImage(named: NSImage.Name(rawValue: appName == "com.whatsapp" ? "WhatsApp":"Messenger")), forKey: "_identityImage")
-        center?.deliver(notification)
+        print(id)
+        var notification = notifData[id]
+        if (notification != nil) {
+            print("not nil")
+            var text = notification?.informativeText
+            if (!(text == message)){
+                text = text! + ". " + message
+                notification?.informativeText = text
+                notifData[id] = notification
+            }
+        } else {
+            print("nil")
+            notification = NSUserNotification()
+            notification?.title = title
+            notification?.subtitle = subTitle
+            notification?.identifier = id
+            notification?.informativeText = message
+            notification?.soundName = NSUserNotificationDefaultSoundName
+            notification?.userInfo = ["app_name": appName]
+            notification?.hasReplyButton = true
+            notification?.otherButtonTitle = "Dismiss"
+            notification?.setValue(NSImage(named: NSImage.Name(rawValue: appName == "com.whatsapp" ? "WhatsApp":"Messenger")), forKey: "_identityImage")
+            notifData[id] = notification
+        }
+        center?.deliver(notification!)
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
@@ -75,11 +89,12 @@ class ViewController: NSViewController, NSUserNotificationCenterDelegate {
             response["id"] = notification.identifier
             
             ref.child("notifyme/123456789/desktop").setValue(response)
+            notifData.removeValue(forKey: notification.identifier!)
         }
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
-    
+        
     }
     
     override func viewDidDisappear() {

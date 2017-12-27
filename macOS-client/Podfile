@@ -6,8 +6,8 @@ target 'Notify Me' do
   use_frameworks!
 
   # Pods for Notify Me
-pod 'FirebaseDatabase', :path => '/Users/vishal/firebase-ios-sdk'
-pod 'FirebaseCore', :path => '/Users/vishal/firebase-ios-sdk'
+  pod 'FirebaseDatabase', :path => '/Users/vishal/firebase-ios-sdk'
+  pod 'FirebaseCore', :path => '/Users/vishal/firebase-ios-sdk'
 pod 'Material', '2.0.0'
 
 end
