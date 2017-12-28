@@ -128,7 +128,7 @@ public class NotificationListener extends NotificationListenerService {
     public void onNotificationRemoved(StatusBarNotification sbn) {
         if (isNotifyEnabled) {
             if (sbn.getPackageName().equals("com.whatsapp") | sbn.getPackageName().equals("com.facebook.orca")) {
-                String id = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE).toLowerCase().replaceAll("\\(.*?\\)", "").replace(" ", "").replace(":","");
+                String id = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE).toLowerCase().replaceAll("\\(.*?\\)", "").replace(":","").replaceAll(" ", "");
                 reference.child("remove" + "/id").setValue(id);
             }
         }
@@ -164,7 +164,7 @@ public class NotificationListener extends NotificationListenerService {
         Log.d(TAG, "disconnected");
         fbMsgList.clear();
         waList.clear();
-        reference.removeEventListener(messagesListener);
+        reference.child("desktop").removeEventListener(messagesListener);
     }
 
     private void handleAssistBotNotifications(StatusBarNotification statusBarNotification) {
@@ -235,7 +235,7 @@ public class NotificationListener extends NotificationListenerService {
         if ((actions.size() > 0) && (packageName.equals("com.whatsapp") || packageName.equals("com.facebook.orca"))) {
             try {
 
-                String id = bundle.getString(Notification.EXTRA_TITLE).toLowerCase().replaceAll("\\(.*?\\)", "").replace(" ", "").replace(":","");
+                String id = bundle.getString(Notification.EXTRA_TITLE).toLowerCase().replaceAll("\\(.*?\\)", "").replace(":","").replaceAll(" ", "");
 
                 HashMap<String, String> object = new HashMap<>();
                 object.put("name", bundle.getString(Notification.EXTRA_TITLE));
@@ -302,7 +302,7 @@ public class NotificationListener extends NotificationListenerService {
                 if (isNotifyEnabled) {
                     connectToFirebase();
                 } else {
-                    reference.removeEventListener(messagesListener);
+                    reference.child("desktop").removeEventListener(messagesListener);
                 }
             } else if (intent.getAction().equals(ENABLE_WA)) {
                 isWhatsAppEnabled = intent.getStringExtra(isWhatsAppOn).equals("1");
@@ -337,14 +337,17 @@ public class NotificationListener extends NotificationListenerService {
                 String senderMsg = object.get("message");
                 String id = object.get("id");
 
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        reference.child("desktop").setValue(null);
-                    }
-                }, 1000);
-
-                reply(hashMap.get(id).getRemoteInputs(), hashMap.get(id).getPendingIntent(), hashMap.get(id).getBundle(), senderName, appName, senderMsg, id);
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        reference.child("desktop").setValue(null);
+//                    }
+//                }, 5000);
+                try {
+                    reply(hashMap.get(id).getRemoteInputs(), hashMap.get(id).getPendingIntent(), hashMap.get(id).getBundle(), senderName, appName, senderMsg, id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
