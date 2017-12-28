@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                 phoneNumber = phone.getText().toString();
                 switch (state) {
                     case STATE_CODE_SENT:
-                        verifyOtp(mVerificationId, phone.getText().toString());
+                        verifyOtp(mVerificationId, phoneNumber);
                         break;
                     case STAT_TIME_OUT:
                         resendOtp(phoneNumber, mResendToken);

@@ -38,7 +38,7 @@ class ViewController: NSViewController, NSUserNotificationCenterDelegate {
             let data = snapshot.value as? [String: String]
             if (data != nil) {
                 for noti in (self.center?.deliveredNotifications)! {
-                    if noti.identifier == data!["id"]! {
+                    if noti.identifier! == data!["id"]! {
                         self.center?.removeDeliveredNotification(noti)
                         break
                     }

@@ -113,10 +113,14 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        if (isAssistEnabled) {
-            handleAssistBotNotifications(sbn);
-        } else if (isNotifyEnabled) {
-            handleNotifyNotifications(sbn);
+        try {
+            if (isAssistEnabled) {
+                handleAssistBotNotifications(sbn);
+            } else if (isNotifyEnabled) {
+                handleNotifyNotifications(sbn);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -124,7 +128,7 @@ public class NotificationListener extends NotificationListenerService {
     public void onNotificationRemoved(StatusBarNotification sbn) {
         if (isNotifyEnabled) {
             if (sbn.getPackageName().equals("com.whatsapp") | sbn.getPackageName().equals("com.facebook.orca")) {
-                String id = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE).toLowerCase();
+                String id = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE).toLowerCase().replaceAll("\\(.*?\\)", "").replace(" ", "").replace(":","");
                 reference.child("remove" + "/id").setValue(id);
             }
         }
@@ -231,7 +235,7 @@ public class NotificationListener extends NotificationListenerService {
         if ((actions.size() > 0) && (packageName.equals("com.whatsapp") || packageName.equals("com.facebook.orca"))) {
             try {
 
-                String id = bundle.getString(Notification.EXTRA_TITLE).replaceAll("\\(.*?\\)", "").replace(" ", "").replace(":","");
+                String id = bundle.getString(Notification.EXTRA_TITLE).toLowerCase().replaceAll("\\(.*?\\)", "").replace(" ", "").replace(":","");
 
                 HashMap<String, String> object = new HashMap<>();
                 object.put("name", bundle.getString(Notification.EXTRA_TITLE));
